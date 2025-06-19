@@ -63,7 +63,11 @@ contract DynamicSvgNft is ERC721 {
         }
         (, int256 price, , , ) = i_priceFeed.latestRoundData();
         string memory imageURI = s_lowSvgURI;
-        if (price >= s_tokenIdToHighValue[tokenId]) {
+        uint8 decimals = i_priceFeed.decimals();
+        int256 highValue = s_tokenIdToHighValue[tokenId] *
+            int256(10 ** decimals);
+
+        if (price >= highValue) {
             imageURI = s_highSvgURI;
         }
         string memory jsonURI = string(
@@ -71,12 +75,14 @@ contract DynamicSvgNft is ERC721 {
                 _baseURI(),
                 Base64.encode(
                     bytes(
-                        abi.encodePacked(
-                            '{"name":"',
-                            name(),
-                            '","description":"A dynamic on chain svg NFT","image":"',
-                            imageURI,
-                            '"}'
+                        string(
+                            abi.encodePacked(
+                                '{"name":"',
+                                name(),
+                                '","description":"A dynamic on chain svg NFT","image":"',
+                                imageURI,
+                                '"}'
+                            )
                         )
                     )
                 )
