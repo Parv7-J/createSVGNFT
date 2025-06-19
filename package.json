@@ -1,4 +1,5 @@
 {
+  "license": "MIT",
   "devDependencies": {
     "@chainlink/contracts": "^1.4.0",
     "@nomicfoundation/hardhat-ignition": "^0.15.0",
